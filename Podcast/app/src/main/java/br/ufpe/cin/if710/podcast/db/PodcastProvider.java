@@ -2,10 +2,13 @@ package br.ufpe.cin.if710.podcast.db;
 
 import android.content.ContentProvider;
 import android.content.ContentValues;
+import android.content.Context;
 import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 
 public class PodcastProvider extends ContentProvider {
+    private PodcastDBHelper podcast;
     public PodcastProvider() {
     }
 
@@ -24,21 +27,25 @@ public class PodcastProvider extends ContentProvider {
 
     @Override
     public Uri insert(Uri uri, ContentValues values) {
-        // TODO: Implement this to handle requests to insert a new row.
-        throw new UnsupportedOperationException("Not yet implemented");
+        final SQLiteDatabase database = this.podcast.getReadableDatabase();
+        long data = database.insert(PodcastDBHelper.DATABASE_TABLE, null, values);
+        uri = uri.withAppendedPath(PodcastProviderContract.EPISODE_LIST_URI, Long.toString(data));
+
+        return uri;
+
     }
 
     @Override
     public boolean onCreate() {
-        // TODO: Implement this to initialize your content provider on startup.
-        return false;
+        Context context = this.getContext();
+        this.podcast = PodcastDBHelper.getInstance(context);
+        return true;
     }
 
     @Override
     public Cursor query(Uri uri, String[] projection, String selection,
                         String[] selectionArgs, String sortOrder) {
-        // TODO: Implement this to handle query requests from clients.
-        throw new UnsupportedOperationException("Not yet implemented");
+        return podcast.getReadableDatabase().query(PodcastDBHelper.DATABASE_TABLE, projection, selection, selectionArgs, null, null, sortOrder);
     }
 
     @Override
