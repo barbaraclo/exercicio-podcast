@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ListView;
@@ -100,6 +101,10 @@ public class MainActivity extends Activity {
                     contentValues.put(PodcastDBHelper.EPISODE_FILE_URI, "");
 
                     Uri uri = getContentResolver().insert(PodcastProviderContract.EPISODE_LIST_URI, contentValues);
+
+                    if (uri != null) {
+                        Log.d("Main Activity", "Item inseridos");
+                    }
                 }
             } catch (IOException e) {
                 e.printStackTrace();

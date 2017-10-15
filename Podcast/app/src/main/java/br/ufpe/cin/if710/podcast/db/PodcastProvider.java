@@ -27,9 +27,9 @@ public class PodcastProvider extends ContentProvider {
 
     @Override
     public Uri insert(Uri uri, ContentValues values) {
-        final SQLiteDatabase database = this.podcast.getReadableDatabase();
+        final SQLiteDatabase database = podcast.getReadableDatabase();
         long data = database.insert(PodcastDBHelper.DATABASE_TABLE, null, values);
-        uri = uri.withAppendedPath(PodcastProviderContract.EPISODE_LIST_URI, Long.toString(data));
+        uri = Uri.withAppendedPath(PodcastProviderContract.EPISODE_LIST_URI, Long.toString(data));
 
         return uri;
 
@@ -45,13 +45,14 @@ public class PodcastProvider extends ContentProvider {
     @Override
     public Cursor query(Uri uri, String[] projection, String selection,
                         String[] selectionArgs, String sortOrder) {
+
         return podcast.getReadableDatabase().query(PodcastDBHelper.DATABASE_TABLE, projection, selection, selectionArgs, null, null, sortOrder);
+
     }
 
     @Override
     public int update(Uri uri, ContentValues values, String selection,
                       String[] selectionArgs) {
-        // TODO: Implement this to handle requests to update one or more rows.
-        throw new UnsupportedOperationException("Not yet implemented");
+        return podcast.getWritableDatabase().update(PodcastDBHelper.DATABASE_TABLE, values, selection, selectionArgs);
     }
 }
